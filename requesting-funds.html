@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Requesting Funds · AIA PTA</title>
+<meta name="description" content="How to request PTA funds to support the AIA community.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%234a2a7a'/%3E%3Ccircle cx='54' cy='54' r='14' fill='%23f2a516'/%3E%3Ctext x='30' y='40' font-family='Georgia' font-size='22' font-weight='700' fill='white' text-anchor='middle'%3EAIA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,500..700;1,9..144,500..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbf7f0; --surface:#ffffff; --surface-2:#f6f1e8; --ink:#1d1a2b; --muted:#5d586b; --line:#e9e2d5;
+  --plum:#4a2a7a; --plum-2:#6b3fb0; --plum-soft:#efe7fa; --plum-ink:#ffffff;
+  --gold:#f2a516; --gold-soft:#fdf0d3; --gold-ink:#2a1c00;
+  --coral:#df5a40; --coral-soft:#fbe4de; --teal:#12806e; --teal-soft:#dcf1ec; --sky:#2f6fd6; --sky-soft:#e1ebfb;
+  --radius:20px; --radius-sm:12px;
+  --shadow:0 1px 2px rgba(29,26,43,.05),0 10px 30px -12px rgba(29,26,43,.14);
+  --display:"Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --sans:"Figtree", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#15131d; --surface:#1e1b29; --surface-2:#242031; --ink:#f2eff8; --muted:#b0aac0; --line:#332e44;
+    --plum:#b48cf0; --plum-2:#c9a8ff; --plum-soft:#2c2442; --plum-ink:#15131d;
+    --gold:#f6b93b; --gold-soft:#3a2f17; --gold-ink:#1b1300;
+    --coral:#f08470; --coral-soft:#3b221e; --teal:#4fc7b1; --teal-soft:#16302b; --sky:#7aa6f2; --sky-soft:#1b2640;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px -12px rgba(0,0,0,.5);
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:var(--plum-2)}
+a:hover{text-decoration-thickness:2px}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.1;letter-spacing:-.015em;margin:0 0 .5em;font-optical-sizing:auto}
+h1{font-size:clamp(2.4rem,6vw,4.4rem)}
+h2{font-size:clamp(1.8rem,3.6vw,2.6rem)}
+h3{font-size:1.25rem;font-family:var(--sans);font-weight:700;letter-spacing:-.005em}
+p{margin:0 0 1em}
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;z-index:100}
+.skip:focus{left:12px}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px}
+
+/* language toggle */
+html[data-lang="en"] .es, html[data-lang="es"] .en{display:none !important}
+
+/* header */
+.site-header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:16px;height:70px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);margin-right:auto}
+.mark{width:42px;height:42px;border-radius:12px;background:var(--plum);color:var(--plum-ink);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.02em;position:relative;overflow:hidden;flex:none}
+.mark::after{content:"";position:absolute;right:-8px;bottom:-8px;width:20px;height:20px;border-radius:50%;background:var(--gold)}
+.brand b{display:block;font-size:16px;line-height:1.1}
+.brand small{display:block;font-size:12.5px;color:var(--muted);line-height:1.2}
+.nav{display:flex;gap:2px}
+.nav a{color:var(--ink);text-decoration:none;font-size:15px;font-weight:550;padding:8px 12px;border-radius:999px;white-space:nowrap}
+.nav a:hover{background:var(--surface-2)}
+.nav a[aria-current="page"]{background:var(--plum-soft);color:var(--plum)}
+.tools{display:flex;align-items:center;gap:10px}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--surface)}
+.lang button{all:unset;cursor:pointer;font-size:13px;font-weight:700;padding:5px 10px;border-radius:999px;color:var(--muted);letter-spacing:.04em}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.menu-btn{all:unset;display:none;cursor:pointer;width:42px;height:42px;border-radius:12px;place-items:center;border:1px solid var(--line);background:var(--surface)}
+@media (max-width:1020px){
+  .nav{display:none;position:absolute;left:0;right:0;top:70px;flex-direction:column;gap:2px;padding:10px 16px 18px;background:var(--bg);border-bottom:1px solid var(--line);box-shadow:var(--shadow)}
+  .nav.open{display:flex}
+  .nav a{padding:12px 14px;font-size:17px}
+  .menu-btn{display:grid}
+  .tools .btn{display:none}
+}
+@media (max-width:420px){.brand small{display:none}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15.5px;text-decoration:none;padding:12px 20px;border-radius:999px;border:1.5px solid transparent;transition:transform .15s ease, box-shadow .15s ease;cursor:pointer;line-height:1.2;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}
+.btn .ic{width:18px;height:18px}
+.btn-gold{background:var(--gold);color:var(--gold-ink);box-shadow:0 6px 18px -8px rgba(242,165,22,.8)}
+.btn-plum{background:var(--plum);color:var(--plum-ink)}
+.btn-ghost{border-color:var(--line);color:var(--ink);background:var(--surface)}
+.btn-light{background:#fff;color:#2b1650}
+.btn-outline-light{border-color:rgba(255,255,255,.5);color:#fff}
+.btn-sm{padding:9px 15px;font-size:14px}
+
+/* sections */
+.section{padding:84px 0}
+.section.tight{padding:56px 0}
+.alt{background:var(--surface-2)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--coral);margin-bottom:14px}
+.eyebrow::before{content:"";width:22px;height:2px;background:currentColor;border-radius:2px}
+.lead{font-size:clamp(1.05rem,1.6vw,1.25rem);color:var(--muted);max-width:62ch}
+.sec-head{max-width:720px;margin-bottom:40px}
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:900px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.g2,.g3,.g4{grid-template-columns:1fr}.section{padding:60px 0}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow)}
+.card h3{margin-bottom:.35em}
+.card p:last-child{margin-bottom:0}
+.chip-ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;margin-bottom:16px}
+.t-plum{background:var(--plum-soft);color:var(--plum)}
+.t-gold{background:var(--gold-soft);color:#a86d00}
+.t-coral{background:var(--coral-soft);color:var(--coral)}
+.t-teal{background:var(--teal-soft);color:var(--teal)}
+.t-sky{background:var(--sky-soft);color:var(--sky)}
+@media (prefers-color-scheme: dark){.t-gold{color:var(--gold)}}
+.muted{color:var(--muted)}
+
+/* home hero */
+.hero{position:relative;overflow:hidden;padding:72px 0 88px}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(var(--line) 1.2px,transparent 1.2px);background-size:22px 22px;mask-image:linear-gradient(to bottom,#000 30%,transparent);-webkit-mask-image:linear-gradient(to bottom,#000 30%,transparent);opacity:.9;pointer-events:none}
+.hero-grid{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.hero h1 em{font-style:italic;color:var(--plum-2)}
+.hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.bubbles{position:relative;aspect-ratio:1/1;max-width:500px;justify-self:center;width:100%}
+.blob{position:absolute;inset:8%;border-radius:46% 54% 42% 58%/52% 44% 56% 48%;background:linear-gradient(140deg,var(--plum) 0%,var(--plum-2) 55%,var(--coral) 120%)}
+.blob::after{content:"";position:absolute;width:38%;height:38%;right:-6%;bottom:2%;border-radius:50%;background:var(--gold)}
+.bub{position:absolute;padding:10px 16px;border-radius:18px;background:var(--surface);color:var(--ink);font-weight:700;font-size:clamp(14px,1.6vw,18px);box-shadow:var(--shadow);border:1px solid var(--line);white-space:nowrap;animation:float 6s ease-in-out infinite}
+.bub::after{content:"";position:absolute;left:18px;bottom:-7px;width:14px;height:14px;background:inherit;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transform:rotate(45deg)}
+.bub small{display:block;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.04em}
+.bub.c1{left:0;top:8%}
+.bub.c2{right:2%;top:2%;animation-delay:-1.5s}
+.bub.c3{left:28%;top:34%;background:var(--gold);color:var(--gold-ink);border-color:transparent;font-size:clamp(18px,2.4vw,26px);font-family:var(--display);animation-delay:-3s}
+.bub.c3 small{color:rgba(42,28,0,.7)}
+.bub.c4{right:0;top:52%;animation-delay:-2s}
+.bub.c5{left:4%;bottom:14%;animation-delay:-4s}
+.bub.c6{right:22%;bottom:2%;animation-delay:-.7s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@media (prefers-reduced-motion:reduce){.bub{animation:none}.btn{transition:none}}
+@media (max-width:860px){.hero-grid{grid-template-columns:1fr}.bubbles{max-width:420px}}
+
+/* next-up strip */
+.next{margin-top:-44px;position:relative;z-index:2}
+.next .card{display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center;padding:22px 26px}
+.next-list{display:flex;gap:14px;flex-wrap:wrap}
+.mini{display:flex;gap:12px;align-items:center;min-width:220px;flex:1}
+.datebox{flex:none;width:58px;height:62px;border-radius:14px;background:var(--plum);color:var(--plum-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.datebox .m{font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+.datebox .d{font-family:var(--display);font-size:26px;font-weight:700;margin-top:3px}
+.datebox.gold{background:var(--gold);color:var(--gold-ink)}
+.datebox.teal{background:var(--teal);color:#fff}
+.mini b{display:block;font-size:15.5px;line-height:1.3}
+.mini span.w{font-size:13.5px;color:var(--muted)}
+.next-label{font-family:var(--display);font-size:22px;font-weight:600;line-height:1.1}
+@media (max-width:900px){.next .card{grid-template-columns:1fr}}
+
+/* about */
+.split{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:start}
+@media (max-width:860px){.split{grid-template-columns:1fr;gap:24px}}
+.prose p{color:var(--ink)}
+.pull{font-family:var(--display);font-size:clamp(1.3rem,2.4vw,1.75rem);line-height:1.35;color:var(--plum);font-style:italic;border-left:4px solid var(--gold);padding-left:20px;margin-top:28px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;padding:7px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+
+/* funds list */
+.funds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.funds{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.funds{grid-template-columns:1fr}}
+.fund{display:flex;gap:14px;align-items:center;padding:16px 18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);font-weight:650}
+.fund .chip-ic{margin:0;width:40px;height:40px;border-radius:12px;flex:none}
+
+/* stats */
+.stat{padding:26px;border-radius:var(--radius);background:var(--plum);color:var(--plum-ink);position:relative;overflow:hidden}
+.stat:nth-child(2){background:var(--teal);color:#fff}
+.stat:nth-child(3){background:var(--coral);color:#fff}
+.stat:nth-child(4){background:var(--gold);color:var(--gold-ink)}
+.stat .big{font-family:var(--display);font-size:clamp(2.2rem,4vw,3rem);font-weight:700;line-height:1;margin-bottom:12px}
+.stat p{margin:0;font-weight:550;opacity:.95}
+@media (prefers-color-scheme: dark){.stat{color:#15131d}.stat:nth-child(2),.stat:nth-child(3){color:#15131d}}
+
+/* contact channels */
+.chan{display:flex;gap:16px;align-items:flex-start;text-decoration:none;color:var(--ink);transition:transform .15s ease, border-color .15s ease}
+.chan:hover{transform:translateY(-2px);border-color:var(--plum-2)}
+.chan .chip-ic{margin:0;flex:none}
+.chan b{display:block;font-size:17px}
+.chan span{color:var(--muted);font-size:15px;overflow-wrap:anywhere}
+.chan .btn,.chan .btn span{color:var(--plum-ink)}
+
+/* band */
+.band{background:linear-gradient(120deg,var(--plum) 0%,#6b3fb0 100%);color:#fff;border-radius:28px;padding:48px;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center;position:relative;overflow:hidden}
+.band::after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;background:var(--gold);opacity:.9;right:-90px;top:-120px}
+.band h2{color:#fff;margin-bottom:.3em}
+.band p{color:rgba(255,255,255,.85);margin:0;max-width:56ch}
+.band .cta{position:relative;z-index:1;display:flex;gap:12px;flex-wrap:wrap}
+@media (prefers-color-scheme: dark){.band{background:linear-gradient(120deg,#3a2363 0%,#53308c 100%)}}
+@media (max-width:760px){.band{grid-template-columns:1fr;padding:34px 26px}}
+
+/* page hero */
+.page-hero{background:var(--plum);color:#fff;padding:64px 0 72px;position:relative;overflow:hidden}
+@media (prefers-color-scheme: dark){.page-hero{background:#2c2145}}
+.page-hero::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(242,165,22,.95) 0 34%,transparent 35%);right:-110px;top:-160px}
+.page-hero::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.14) 1.2px,transparent 1.2px);background-size:22px 22px;mask-image:linear-gradient(90deg,transparent,#000 70%);-webkit-mask-image:linear-gradient(90deg,transparent,#000 70%)}
+.page-hero .wrap{position:relative;z-index:1}
+@media (max-width:640px){.page-hero::before{width:240px;height:240px;right:-120px;top:-130px}}
+.page-hero h1{color:#fff;font-size:clamp(2.3rem,5.5vw,3.8rem)}
+.page-hero .lead{color:rgba(255,255,255,.85)}
+.page-hero .eyebrow{color:var(--gold)}
+.page-hero .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+
+/* events */
+.events{display:flex;flex-direction:column;gap:14px}
+.event{display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;padding:20px 22px}
+.event h3{margin:0 0 4px;font-size:1.15rem}
+.event p{margin:0;color:var(--muted);font-size:15.5px}
+.tag{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:var(--gold-soft);color:#8a5a00;margin-left:6px;vertical-align:middle}
+@media (prefers-color-scheme: dark){.tag{color:var(--gold)}}
+.tag.today{background:var(--coral);color:#fff}
+.event.is-past{display:none}
+.empty{display:none}
+.events.all-past + .empty{display:block}
+@media (max-width:640px){.event{grid-template-columns:auto 1fr}.event .btn{grid-column:1 / -1;justify-self:start}}
+.tbd{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.tbd li{list-style:none;display:flex;align-items:center;gap:10px;padding:14px 16px;border:1.5px dashed var(--line);border-radius:var(--radius-sm);font-weight:650;background:var(--surface)}
+.tbd li .ic{color:var(--coral);flex:none}
+.tbd{padding:0;margin:0}
+
+/* gallery */
+.gallery{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+@media (max-width:860px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ph{margin:0;border-radius:var(--radius-sm);overflow:hidden;position:relative;aspect-ratio:4/3;background:linear-gradient(135deg,var(--plum-soft),var(--gold-soft));border:1px solid var(--line)}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph.noimg img{display:none}
+.ph.noimg::before{content:"";position:absolute;inset:0;background-image:radial-gradient(var(--line) 1.2px,transparent 1.2px);background-size:16px 16px}
+.ph figcaption{position:absolute;left:10px;bottom:10px;right:10px;font-size:13px;font-weight:700;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.ph.noimg figcaption{color:var(--plum);text-shadow:none}
+.ph.wide{grid-column:span 2;aspect-ratio:auto}
+.hl-title{display:flex;align-items:baseline;gap:12px;margin:36px 0 14px}
+.hl-title h3{margin:0}
+
+/* carousel */
+.carousel{position:relative;border-radius:var(--radius);overflow:hidden;background:#120e1c;aspect-ratio:16/9;box-shadow:var(--shadow)}
+@media (max-width:640px){.carousel{aspect-ratio:4/3}}
+.car-stage{position:absolute;inset:0}
+.car-slide{position:absolute;inset:0;opacity:0;transition:opacity .9s ease}
+.car-slide.on{opacity:1}
+.car-slide .bgblur{position:absolute;inset:-30px;background-size:cover;background-position:center;filter:blur(28px) brightness(.55);transform:scale(1.1)}
+.car-slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.car-empty{display:none;position:absolute;inset:0;place-items:center;color:#fff;font-family:var(--display);font-size:1.6rem;background:linear-gradient(135deg,var(--plum),var(--plum-2))}
+.carousel.is-empty .car-empty{display:grid}
+.carousel.is-empty .car-ctrl,.carousel.is-empty .car-bar{display:none}
+.car-ctrl{position:absolute;right:14px;bottom:18px;display:flex;gap:8px;z-index:2}
+.car-btn{all:unset;cursor:pointer;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.92);color:#2b1650;font-size:12px;font-weight:800;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.car-btn:hover{background:#fff}
+.car-btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.car-bar{position:absolute;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,.18);z-index:2}
+.car-bar span{display:block;height:100%;width:0;background:var(--gold)}
+@media (prefers-reduced-motion:reduce){.car-slide{transition:none}}
+
+/* timeline */
+.timeline{position:relative;padding-left:28px;margin:0;list-style:none}
+.timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.timeline li{position:relative;padding:0 0 26px}
+.timeline li::before{content:"";position:absolute;left:-26px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:3px solid var(--plum-2)}
+.timeline li:nth-child(even)::before{border-color:var(--gold)}
+.timeline .when{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--coral)}
+.timeline .what{font-weight:650;font-size:17px}
+
+/* steps */
+.steps{counter-reset:s;display:grid;gap:16px;grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:860px){.steps{grid-template-columns:1fr}}
+.step{counter-increment:s;position:relative;padding-top:58px}
+.step::before{content:counter(s);position:absolute;top:22px;left:26px;font-family:var(--display);font-weight:700;font-size:28px;color:var(--plum-2);line-height:1}
+
+/* price */
+.price{display:flex;flex-direction:column}
+.price .amt{font-family:var(--display);font-size:2.6rem;font-weight:700;line-height:1;margin:6px 0 10px;color:var(--plum)}
+.price .amt small{font-size:1rem;font-family:var(--sans);color:var(--muted);font-weight:600}
+.price.featured{background:var(--plum);color:var(--plum-ink);border-color:transparent}
+.price.featured .amt{color:var(--gold)}
+.price.featured .muted, .price.featured .amt small{color:rgba(255,255,255,.8)}
+@media (prefers-color-scheme: dark){.price.featured .muted,.price.featured .amt small{color:rgba(21,19,29,.75)}.price.featured .amt{color:#3a2700}}
+.code{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:16px 18px;border-radius:var(--radius-sm);background:var(--gold-soft);border:1px dashed #e7b450;margin:18px 0}
+.code b{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:20px;letter-spacing:.08em}
+.code button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:700;padding:7px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+.grid + .lead{margin-top:28px}
+.callout{border-left:4px solid var(--teal);background:var(--teal-soft);border-radius:var(--radius-sm);padding:22px 24px}
+.callout h3{display:flex;align-items:center;gap:10px}
+.ticks{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.ticks li{display:flex;gap:10px;align-items:flex-start}
+.ticks li .ic{flex:none;color:var(--teal);margin-top:3px}
+.links-row{display:flex;flex-wrap:wrap;gap:12px}
+
+/* officers */
+.officer{text-align:center;padding:30px 22px}
+.avatar{width:84px;height:84px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:28px;font-weight:700}
+.officer .role{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--coral)}
+.officer .name{font-size:19px;font-weight:700;margin-top:4px;line-height:1.3}
+
+/* footer */
+.site-footer{margin-top:40px;padding:56px 0 34px;border-top:1px solid var(--line);background:var(--surface)}
+.f-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:36px}
+@media (max-width:760px){.f-grid{grid-template-columns:1fr}}
+.site-footer h4{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+.site-footer ul{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.site-footer a{color:var(--ink);text-decoration:none}
+.site-footer a:hover{color:var(--plum-2);text-decoration:underline}
+.social{display:flex;gap:10px;margin-top:16px}
+.social a{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;border:1px solid var(--line);background:var(--bg)}
+.fine{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);font-size:14px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main"><span class="en">Skip to content</span><span class="es">Saltar al contenido</span></a>
+<header class="site-header"><div class="wrap bar">
+  <a class="brand" href="index.html" aria-label="AIA PTA home">
+    <span class="mark">AIA</span>
+    <span><b>AIA PTA</b><small><span class="en">Albany International Academy</span><span class="es">Academia Internacional de Albany</span></small></span>
+  </a>
+  <nav class="nav" aria-label="Main"><a href="index.html"><span class="en">Home</span><span class="es">Inicio</span></a><a href="events.html"><span class="en">Events</span><span class="es">Eventos</span></a><a href="yearbook.html"><span class="en">Yearbook</span><span class="es">Anuario</span></a><a href="fundraising.html"><span class="en">Fundraising</span><span class="es">Recaudación</span></a><a href="officers.html"><span class="en">Officers</span><span class="es">Directiva</span></a><a href="requesting-funds.html" aria-current="page"><span class="en">Requesting Funds</span><span class="es">Solicitar fondos</span></a></nav>
+  <div class="tools">
+    <div class="lang" role="group" aria-label="Language / Idioma">
+      <button type="button" data-l="en" aria-pressed="true">EN</button><button type="button" data-l="es" aria-pressed="false">ES</button>
+    </div>
+    <a class="btn btn-gold btn-sm" href="https://aiapta.givebacks.com/shop" target="_blank" rel="noopener"><span class="en">Join the PTA</span><span class="es">Únete</span></a>
+    <button class="menu-btn" type="button" aria-label="Menu" aria-expanded="false" data-m='<svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>' data-x='<svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>'><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  </div>
+</div></header>
+<main id="main">
+<section class="page-hero"><div class="wrap">
+  <div class="eyebrow"><span class="en">For staff & families</span><span class="es">Para personal y familias</span></div>
+  <h1><span class="en">Requesting funds</span><span class="es">Solicitar fondos</span></h1>
+  <p class="en lead">Requesting funds to support the AIA community? Please read the information below before submitting a request.</p><p class="es lead">¿Desea solicitar fondos para apoyar a la comunidad de AIA? Lea la información a continuación antes de enviar su solicitud.</p>
+  <div class="cta"><a class="btn btn-gold" href="https://docs.google.com/forms/d/16BjGqXoKmKF1Gfn-4CVU7NqZzpyyYlF45Um8Y5WlJrA/viewform" target="_blank" rel="noopener"><span class="en">Online request form</span><span class="es">Formulario en línea</span> <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a><a class="btn btn-outline-light" href="https://drive.google.com/file/d/1MV0vvLd3N4E8RapFpVq-ifQXgAzcklsp/view?usp=sharing" target="_blank" rel="noopener"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8M16 13H8M16 17H8"/></svg> <span class="en">Printable form</span><span class="es">Formulario imprimible</span></a></div>
+</div></section>
+<section class="section"><div class="wrap">
+  <div class="sec-head"><div class="eyebrow"><span class="en">How it works</span><span class="es">Cómo funciona</span></div><h2><span class="en">From request to vote</span><span class="es">De la solicitud a la votación</span></h2>
+  <p class="en lead">The PTA accepts requests for funds on a rolling basis. We cannot fulfill all funding requests.</p><p class="es lead">La PTA acepta solicitudes de fondos de forma continua. No podemos atender todas las solicitudes.</p></div>
+  <div class="steps">
+    <div class="card step"><div class="chip-ic t-plum" style="position:absolute;right:22px;top:22px;margin:0"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8M16 13H8M16 17H8"/></svg></div><h3><span class="en">Submit your request</span><span class="es">Envía tu solicitud</span></h3>
+      <p class="en">Use the <a href="https://docs.google.com/forms/d/16BjGqXoKmKF1Gfn-4CVU7NqZzpyyYlF45Um8Y5WlJrA/viewform" target="_blank" rel="noopener">online Funding Request Form</a> or the <a href="https://drive.google.com/file/d/1MV0vvLd3N4E8RapFpVq-ifQXgAzcklsp/view?usp=sharing" target="_blank" rel="noopener">printable version</a>.</p>
+      <p class="es">Usa el <a href="https://docs.google.com/forms/d/16BjGqXoKmKF1Gfn-4CVU7NqZzpyyYlF45Um8Y5WlJrA/viewform" target="_blank" rel="noopener">formulario en línea</a> o la <a href="https://drive.google.com/file/d/1MV0vvLd3N4E8RapFpVq-ifQXgAzcklsp/view?usp=sharing" target="_blank" rel="noopener">versión imprimible</a>.</p></div>
+    <div class="card step"><div class="chip-ic t-gold" style="position:absolute;right:22px;top:22px;margin:0"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><h3><span class="en">At least one week ahead</span><span class="es">Al menos una semana antes</span></h3>
+      <p class="en">Requests must be made at least one week before the PTA meeting where they’ll be reviewed.</p><p class="es">Las solicitudes deben enviarse al menos una semana antes de la reunión de la PTA en que se revisarán.</p></div>
+    <div class="card step"><div class="chip-ic t-teal" style="position:absolute;right:22px;top:22px;margin:0"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 12 2 2 4-4"/><path d="M5 7c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v12H5V7Z"/><path d="M22 19H2"/></svg></div><h3><span class="en">Reviewed & voted</span><span class="es">Revisión y votación</span></h3>
+      <p class="en">All funding requests are reviewed and voted on at a PTA meeting.</p><p class="es">Todas las solicitudes se revisan y votan en una reunión de la PTA.</p></div>
+  </div>
+</div></section>
+
+<section class="section alt"><div class="wrap grid g2">
+  <div class="card">
+    <div class="chip-ic t-coral"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2z"/></svg></div>
+    <h3><span class="en">Before you request, please consider</span><span class="es">Antes de solicitar, considere</span></h3>
+    <ul class="ticks">
+      <li><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><span class="en">Whether the items needed can be obtained by asking event participants to bring them (such as snacks).</span><span class="es">Si los artículos pueden conseguirse pidiendo a los participantes que los traigan (como meriendas).</span></span></li>
+      <li><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><span class="en">The size of the request. The larger it is, the more time we may need to fundraise toward it — please submit large requests well in advance.</span><span class="es">El tamaño de la solicitud. Cuanto mayor sea, más tiempo podríamos necesitar para recaudar — envíe las solicitudes grandes con mucha anticipación.</span></span></li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="chip-ic t-plum"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 12 2 2 4-4"/><path d="M5 7c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v12H5V7Z"/><path d="M22 19H2"/></svg></div>
+    <h3><span class="en">Funding is awarded considering</span><span class="es">Los fondos se otorgan considerando</span></h3>
+    <ul class="ticks">
+      <li><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><span class="en">Our funding abilities.</span><span class="es">Nuestra capacidad de financiamiento.</span></span></li>
+      <li><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><span class="en">The extent to which the funds help support the growth of the school community.</span><span class="es">La medida en que los fondos ayudan a apoyar el crecimiento de la comunidad escolar.</span></span></li>
+    </ul>
+  </div>
+</div></section>
+
+<section class="section"><div class="wrap"><div class="band">
+  <div><h2><span class="en">Ready to submit?</span><span class="es">¿Listo para enviar?</span></h2>
+  <p class="en">Questions about a request? Email the PTA and we’ll help.</p><p class="es">¿Preguntas sobre una solicitud? Escríbele a la PTA y te ayudamos.</p></div>
+  <div class="cta">
+    <a class="btn btn-light" href="https://docs.google.com/forms/d/16BjGqXoKmKF1Gfn-4CVU7NqZzpyyYlF45Um8Y5WlJrA/viewform" target="_blank" rel="noopener"><span class="en">Online form</span><span class="es">Formulario en línea</span> <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+    <a class="btn btn-outline-light" href="mailto:aia.pta.families@gmail.com"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Email</a>
+  </div>
+</div></div></section>
+
+</main>
+<footer class="site-footer"><div class="wrap">
+  <div class="f-grid">
+    <div>
+      <a class="brand" href="index.html" style="margin:0"><span class="mark">AIA</span><span><b>AIA PTA</b><small><span class="en">Parent Teacher Association</span><span class="es">Asociación de Padres y Maestros</span></small></span></a>
+      <p class="en muted">The Parent Teacher Association of Albany International Academy — home of the Dual Language and Newcomer Programs. ¡Bienvenidos!</p><p class="es muted">La Asociación de Padres y Maestros de la Academia Internacional de Albany, hogar de los Programas de Doble Inmersión Lingüística y para Recién Llegados. Welcome!</p>
+      <div class="social">
+        <a href="mailto:AICDLP.PTA@gmail.com" aria-label="Email"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></a>
+        <a href="https://www.facebook.com/groups/3347610848784909" target="_blank" rel="noopener" aria-label="Facebook"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+        <a href="https://chat.whatsapp.com/F9PXjlbLowRAyHsnA2Fw5E" target="_blank" rel="noopener" aria-label="WhatsApp"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></a>
+        <a href="https://calendar.google.com/calendar/u/0?cid=MDJhNTNhNTMyMjhiOWMyNGY0YmZlYzIwNzIxODQxZGMyMDI2YTU2YTM4ZTU0YjI3MGI1NGUyYmVjNTgxMjU4OEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t" target="_blank" rel="noopener" aria-label="Google Calendar"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></a>
+      </div>
+    </div>
+    <div><h4><span class="en">Explore</span><span class="es">Explorar</span></h4><ul><li><a href="index.html"><span class="en">Home</span><span class="es">Inicio</span></a></li><li><a href="events.html"><span class="en">Events</span><span class="es">Eventos</span></a></li><li><a href="yearbook.html"><span class="en">Yearbook</span><span class="es">Anuario</span></a></li><li><a href="fundraising.html"><span class="en">Fundraising</span><span class="es">Recaudación</span></a></li><li><a href="officers.html"><span class="en">Officers</span><span class="es">Directiva</span></a></li><li><a href="requesting-funds.html"><span class="en">Requesting Funds</span><span class="es">Solicitar fondos</span></a></li></ul></div>
+    <div><h4><span class="en">Get involved</span><span class="es">Participa</span></h4><ul>
+      <li><a href="https://aiapta.givebacks.com/shop" target="_blank" rel="noopener"><span class="en">Become a member ($5)</span><span class="es">Hazte miembro ($5)</span></a></li>
+      <li><a href="https://aiapta.givebacks.com/shop/items/827946" target="_blank" rel="noopener"><span class="en">Make a donation</span><span class="es">Hacer una donación</span></a></li>
+      <li><a href="https://stores.inksoft.com/aia2/shop/home" target="_blank" rel="noopener"><span class="en">AIA School Store</span><span class="es">Tienda escolar de AIA</span></a></li>
+      <li><a href="mailto:AICDLP.PTA@gmail.com">AICDLP.PTA@gmail.com</a></li>
+    </ul></div>
+  </div>
+  <div class="fine"><span>© <span id="yr">2026</span> AIA PTA · Albany International Academy</span><span><span class="en">Made with care for our families</span><span class="es">Hecho con cariño para nuestras familias</span></span></div>
+</div></footer>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  function setLang(l){
+    root.setAttribute('data-lang',l); root.setAttribute('lang',l);
+    document.querySelectorAll('.lang button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.l===l))});
+    try{localStorage.setItem('aiapta-lang',l)}catch(e){}
+  }
+  var saved=null; try{saved=localStorage.getItem('aiapta-lang')}catch(e){}
+  setLang(saved||((navigator.language||'en').toLowerCase().indexOf('es')===0?'es':'en'));
+  document.querySelectorAll('.lang button').forEach(function(b){b.addEventListener('click',function(){setLang(b.dataset.l)})});
+
+  var mb=document.querySelector('.menu-btn'), nav=document.querySelector('.nav');
+  if(mb){mb.addEventListener('click',function(){var o=nav.classList.toggle('open');mb.setAttribute('aria-expanded',String(o));mb.innerHTML=o?mb.dataset.x:mb.dataset.m;});}
+
+  // date-aware events: hide finished ones, flag today
+  var now=new Date(); var today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  document.querySelectorAll('[data-until]').forEach(function(el){
+    var p=el.getAttribute('data-until').split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]);
+    if(d<today){el.classList.add('is-past')}
+    var s=el.getAttribute('data-date');
+    if(s){var q=s.split('-'); var sd=new Date(+q[0],+q[1]-1,+q[2]); if(sd.getTime()===today.getTime()){var t=el.querySelector('.today-slot'); if(t) t.innerHTML='<span class="tag today"><span class="en">Today</span><span class="es">Hoy</span></span>';}}
+  });
+  document.querySelectorAll('.events').forEach(function(list){
+    var items=list.querySelectorAll('[data-until]'); var left=0;
+    items.forEach(function(i){if(!i.classList.contains('is-past'))left++});
+    if(items.length && !left) list.classList.add('all-past');
+  });
+  // home "next up": show first 3 upcoming
+  var ups=document.querySelectorAll('.next-list .mini'); var shown=0;
+  ups.forEach(function(m){ if(m.classList.contains('is-past')||shown>=3){m.style.display='none'} else shown++; });
+
+  document.querySelectorAll('[data-copy]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var v=b.getAttribute('data-copy');
+      var done=function(){var o=b.innerHTML;b.innerHTML='&#10003; <span class="en">Copied</span><span class="es">Copiado</span>';setTimeout(function(){b.innerHTML=o},1600)};
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(v).then(done,function(){})}
+    });
+  });
+  document.querySelectorAll('.ph img').forEach(function(img){
+    function bad(){img.closest('.ph').classList.add('noimg')}
+    img.addEventListener('error',bad); if(img.complete&&img.naturalWidth===0)bad();
+  });
+  // photo carousel: random order, ~5s per photo, list comes from school_photos/photos.js
+  var car=document.querySelector('.carousel');
+  if(car){
+    var DUR=5000, list=(window.SCHOOL_PHOTOS||[]).filter(Boolean).map(function(f){return /^(https?:|data:)/.test(f)?f:'school_photos/'+f});
+    var stage=car.querySelector('.car-stage'), bar=car.querySelector('.car-bar span');
+    var order=[], pos=-1, timer=null, paused=false, hover=false, start=0, raf;
+    function shuffle(){order=list.slice();for(var i=order.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=order[i];order[i]=order[j];order[j]=t}}
+    function show(src){
+      var s=document.createElement('div');s.className='car-slide';
+      var bg=document.createElement('div');bg.className='bgblur';bg.style.backgroundImage='url("'+src.replace(/"/g,'%22')+'")';
+      var im=new Image();im.alt='';im.decoding='async';
+      im.onload=function(){s.appendChild(bg);s.appendChild(im);stage.appendChild(s);requestAnimationFrame(function(){requestAnimationFrame(function(){s.classList.add('on')})});
+        var old=stage.querySelectorAll('.car-slide');for(var k=0;k<old.length-1;k++){(function(o){o.classList.remove('on');setTimeout(function(){o.remove()},1000)})(old[k])}
+        restart();};
+      im.onerror=function(){list=list.filter(function(x){return x!==src});order=order.filter(function(x){return x!==src});pos--;
+        if(!list.length){car.classList.add('is-empty');return} step(1)};
+      im.src=src;
+    }
+    function step(d){if(!list.length)return;pos+=d;
+      if(pos>=order.length){var last=order[order.length-1];shuffle();if(order.length>1&&order[0]===last){order.push(order.shift())}pos=0}
+      if(pos<0)pos=order.length-1; show(order[pos]);}
+    function tick(){var el=Date.now()-start;bar.style.width=Math.min(100,el/DUR*100)+'%';
+      if(el>=DUR){step(1);return} raf=requestAnimationFrame(tick)}
+    function restart(){cancelAnimationFrame(raf);start=Date.now();bar.style.width='0';if(!paused&&!hover)raf=requestAnimationFrame(tick)}
+    function resume(){start=Date.now()-(parseFloat(bar.style.width)||0)/100*DUR;cancelAnimationFrame(raf);raf=requestAnimationFrame(tick)}
+    car.addEventListener('mouseenter',function(){hover=true;cancelAnimationFrame(raf)});
+    car.addEventListener('mouseleave',function(){hover=false;if(!paused)resume()});
+    car.querySelectorAll('.car-btn').forEach(function(b){b.addEventListener('click',function(){
+      var a=b.dataset.act;
+      if(a==='next')step(1); else if(a==='prev')step(-1);
+      else{paused=!paused;b.setAttribute('aria-label',paused?'Play slideshow':'Pause slideshow');b.querySelector('.p-ic').innerHTML=paused?'&#9654;':'&#10074;&#10074;';
+        if(paused)cancelAnimationFrame(raf); else resume();}
+    })});
+    if(!list.length){car.classList.add('is-empty')} else {shuffle();step(1)}
+  }
+  var y=document.getElementById('yr'); if(y) y.textContent=new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
