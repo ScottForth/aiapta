@@ -378,6 +378,7 @@ html[data-lang="en"] .es, html[data-lang="es"] .en{display:none !important}
   <div class="fine"><span>© <span id="yr">2026</span> AIA PTA · Albany International Academy</span><span><span class="en">Made with care for our families</span><span class="es">Hecho con cariño para nuestras familias</span></span></div>
 </div></footer>
 
+
 <script>
 (function(){
   var root=document.documentElement;
@@ -393,22 +394,161 @@ html[data-lang="en"] .es, html[data-lang="es"] .en{display:none !important}
   var mb=document.querySelector('.menu-btn'), nav=document.querySelector('.nav');
   if(mb){mb.addEventListener('click',function(){var o=nav.classList.toggle('open');mb.setAttribute('aria-expanded',String(o));mb.innerHTML=o?mb.dataset.x:mb.dataset.m;});}
 
-  // date-aware events: hide finished ones, flag today
-  var now=new Date(); var today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  document.querySelectorAll('[data-until]').forEach(function(el){
-    var p=el.getAttribute('data-until').split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]);
-    if(d<today){el.classList.add('is-past')}
-    var s=el.getAttribute('data-date');
-    if(s){var q=s.split('-'); var sd=new Date(+q[0],+q[1]-1,+q[2]); if(sd.getTime()===today.getTime()){var t=el.querySelector('.today-slot'); if(t) t.innerHTML='<span class="tag today"><span class="en">Today</span><span class="es">Hoy</span></span>';}}
-  });
-  document.querySelectorAll('.events').forEach(function(list){
-    var items=list.querySelectorAll('[data-until]'); var left=0;
-    items.forEach(function(i){if(!i.classList.contains('is-past'))left++});
-    if(items.length && !left) list.classList.add('all-past');
-  });
-  // home "next up": show first 3 upcoming
-  var ups=document.querySelectorAll('.next-list .mini'); var shown=0;
-  ups.forEach(function(m){ if(m.classList.contains('is-past')||shown>=3){m.style.display='none'} else shown++; });
+  // date-aware events: hide finished ones, flag today (re-run after the Google Sheet loads)
+  function refreshEvents(){
+    var now=new Date(); var today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+    document.querySelectorAll('[data-until]').forEach(function(el){
+      el.classList.remove('is-past');
+      var p=el.getAttribute('data-until').split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]);
+      if(d<today){el.classList.add('is-past')}
+      var s=el.getAttribute('data-date'); var t=el.querySelector('.today-slot');
+      if(t){t.innerHTML='';}
+      if(s&&t){var q=s.split('-'); var sd=new Date(+q[0],+q[1]-1,+q[2]); if(sd.getTime()===today.getTime()){t.innerHTML='<span class="tag today"><span class="en">Today</span><span class="es">Hoy</span></span>';}}
+    });
+    document.querySelectorAll('.events').forEach(function(list){
+      var items=list.querySelectorAll('[data-until]'); var left=0;
+      items.forEach(function(i){if(!i.classList.contains('is-past'))left++});
+      list.classList.toggle('all-past', !left);
+    });
+    // home "coming up": show the next 3; hide the strip if nothing is upcoming
+    var ups=document.querySelectorAll('.next-list .mini'); var shown=0;
+    ups.forEach(function(m){ m.style.display=''; if(m.classList.contains('is-past')||shown>=3){m.style.display='none'} else shown++; });
+    var nx=document.querySelector('section.next'); if(nx) nx.style.display=(ups.length&&!shown)?'none':'';
+  }
+  refreshEvents();
+
+  // ---- Google Sheet events (configured in sheet-config.js) ----
+  (function(){
+    var cfg=window.AIA_SHEET||{}, url=String(cfg.url||'').trim();
+    var evList=document.querySelector('.events'), next=document.querySelector('.next-list'), tbd=document.querySelector('.tbd');
+    if(!url||(!evList&&!next)) return;
+    var m=url.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/); if(!m){console.warn('AIA: sheet link not recognized');return}
+    var id=m[1], g=url.match(/[#&?]gid=(\d+)/), KEY='aiapta-events-v3-'+id;
+    var ICAL="<svg class=\"ic\" width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"/><path d=\"M16 2v4M8 2v4M3 10h18\"/></svg>", IEXT="<svg class=\"ic\" width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M15 3h6v6\"/><path d=\"M10 14 21 3\"/><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"/></svg>", ICLOCK="<svg class=\"ic\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 6v6l4 2\"/></svg>", CAL_URL="https://calendar.google.com/calendar/u/0?cid=MDJhNTNhNTMyMjhiOWMyNGY0YmZlYzIwNzIxODQxZGMyMDI2YTU2YTM4ZTU0YjI3MGI1NGUyYmVjNTgxMjU4OEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t", COLORS=['','gold','teal'];
+    function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+    function T(en,es){return '<span class="en">'+en+'</span><span class="es">'+es+'</span>'}
+    function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+    function toDate(s){if(!s)return null;var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2])}
+    function parseDate(cell){
+      if(!cell||cell.v==null||cell.v==='') return null;
+      var v=cell.v, mm;
+      if(typeof v==='string'&&(mm=v.match(/^Date\((\d+),(\d+),(\d+)/))) return iso(new Date(+mm[1],+mm[2],+mm[3]));
+      var s=String(cell.f||v).trim();
+      if((mm=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))) return iso(new Date(+mm[1],+mm[2]-1,+mm[3]));
+      if((mm=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/))){var y=+mm[3];if(y<100)y+=2000;return iso(new Date(y,+mm[1]-1,+mm[2]))}
+      var d=new Date(s); if(!isNaN(d)) {if(!/\d{4}/.test(s)) d.setFullYear(new Date().getFullYear()); return iso(d)}
+      return null;
+    }
+    function txt(cell){return cell&&cell.v!=null?String(cell.f!=null&&typeof cell.v!=='string'?cell.f:cell.v).trim():''}
+    var MONTHS={jan:0,ene:0,feb:1,mar:2,apr:3,abr:3,may:4,jun:5,jul:6,aug:7,ago:7,sep:8,set:8,oct:9,nov:10,dec:11,dic:11};
+    function monthIdx(t){t=String(t||'').trim().toLowerCase(); if(!t) return -1; if(/^\d{1,2}$/.test(t)) return +t-1; var k=t.slice(0,3); return k in MONTHS?MONTHS[k]:-1}
+    function num(cell){if(!cell||cell.v==null||cell.v==='')return null; var n=typeof cell.v==='number'?cell.v:parseInt(String(cell.v).replace(/[^\d]/g,''),10); return isNaN(n)?null:n}
+    function yes(cell){return /^(y|yes|x|true|s|s[ií])$/i.test(txt(cell))}
+    // month + day (+ optional year). With no year, pick the year that puts the date nearest to now.
+    function compose(mCell,dCell,yCell){
+      var mi=monthIdx(txt(mCell)), d=num(dCell), y=num(yCell);
+      if(mi<0||!d) return null; if(y&&y<100) y+=2000;
+      if(!y){var now=new Date(), c=new Date(now.getFullYear(),mi,d), diff=(c-now)/864e5; y=now.getFullYear()+(diff<-183?1:diff>183?-1:0)}
+      return iso(new Date(y,mi,d));
+    }
+    // start time: a time cell (Sheets sends Date(1899,11,30,H,M,S) or [H,M,S]), a day fraction, or text like "6pm" / "18:30"
+    function parseTime(cell){
+      if(!cell||cell.v==null||cell.v==='') return '';
+      var v=cell.v, h=null, mi=0, mm;
+      if(Array.isArray(v)){h=+v[0];mi=+v[1]||0}
+      else if(typeof v==='string'&&(mm=v.match(/^Date\(\d+,\d+,\d+,(\d+),(\d+)/))){h=+mm[1];mi=+mm[2]}
+      else if(typeof v==='number'&&v>=0&&v<1){var t=Math.round(v*1440);h=Math.floor(t/60);mi=t%60}
+      else{var str=String(cell.f||v).trim().toLowerCase();
+        if((mm=str.match(/^(\d{1,2})(?:[:.](\d{2}))?\s*([ap])\.?\s*m?\.?/))){h=+mm[1]%12+(mm[3]==='p'?12:0);mi=+(mm[2]||0)}
+        else if((mm=str.match(/^(\d{1,2})[:h](\d{2})/))){h=+mm[1];mi=+mm[2]}
+        else if(/noon|mediod/.test(str)){h=12}}
+      if(h==null||isNaN(h)||h>23||mi>59) return '';
+      return String(h).padStart(2,'0')+':'+String(mi).padStart(2,'0');
+    }
+    function fmtTime(t,lang){var p=t.split(':');return new Date(2000,0,1,+p[0],+p[1]).toLocaleTimeString(lang==='es'?'es-US':'en-US',{hour:'numeric',minute:'2-digit'})}
+    function parse(resp){
+      if(!resp||resp.status==='error') throw new Error('Sheet error: '+JSON.stringify(resp&&resp.errors));
+      var cols=resp.table.cols.map(function(c){return (c.label||'').toLowerCase().trim()}), rows=resp.table.rows.slice();
+      if(cols.every(function(c){return !c})&&rows.length){cols=rows.shift().c.map(function(c){return txt(c).toLowerCase()})}
+      function find(re,not){for(var i=0;i<cols.length;i++){if(cols[i]&&re.test(cols[i])&&!(not&&not.test(cols[i])))return i}return -1}
+      var SP=/spanish|espa[ñn]ol|\(es\)|evento|detalle|nombre|nota/, END=/end|until|through|thru|hasta|final/, FLAG=/single|continu|ongoing/;
+      var ix={
+        es:find(/spanish|espa[ñn]ol|\(es\)|evento|nombre/,/detail|detalle|note|nota|date|fecha|month|mes|day|d[ií]a|link/),
+        en:find(/event|name|title/,SP),
+        month:find(/month|mes/,END), day:find(/date|day|d[ií]a|fecha/,new RegExp(END.source+'|month|mes|year|single|continu')), year:find(/year|a[ñn]o/,END),
+        endMonth:find(/month|mes/,null), endDay:-1, end:-1,
+        single:find(/single|one.?day/), cont:find(/continu|ongoing|multi/),
+        des:find(/detalle|nota|(detail|description|note).*(spanish|espa|\(es\))/),
+        den:find(/note|detail|description|info/,SP),
+        link:find(/link|url|enlace|website/),
+        time:find(/time|hora/,END)
+      };
+      ix.endMonth=find(new RegExp('('+END.source+').*(month|mes)'));
+      ix.endDay=find(new RegExp('('+END.source+').*(day|d[ií]a)'));
+      ix.end=find(END,/month|mes|day|d[ií]a/);
+      if(ix.en<0) ix.en=0;
+      var out=[];
+      rows.forEach(function(r){var c=r.c||[];function g(i){return i>=0?c[i]:null}
+        var en=txt(g(ix.en)); if(!en) return;
+        // start / single date: either one full date cell, or month + day (+ year) columns
+        var date=null, end=null, dc=g(ix.day);
+        if(ix.month>=0&&txt(g(ix.month))) date=compose(g(ix.month),dc,g(ix.year));
+        else if(dc&&(typeof dc.v!=='number'||dc.v>31)) date=parseDate(dc);
+        // end date: one full date cell, or end month + end day columns (year from the year column if given)
+        if(ix.endMonth>=0&&txt(g(ix.endMonth))) end=compose(g(ix.endMonth),g(ix.endDay),g(ix.year));
+        else if(ix.end>=0) end=parseDate(g(ix.end));
+        if(date&&end&&end<date){var ed=toDate(end);ed.setFullYear(ed.getFullYear()+1);end=iso(ed)}
+        // Y/N flags, when the sheet has them
+        var single=ix.single>=0&&yes(g(ix.single)), cont=ix.cont>=0&&yes(g(ix.cont));
+        if(single&&!cont&&date) end=null;
+        if(cont&&!single&&end&&!date) date=null;
+        if(cont&&!single&&!end&&date){end=date;date=null}
+        var link=txt(g(ix.link)); if(!/^https?:\/\//i.test(link)) link='';
+        var den=txt(g(ix.den)); den=den?den.charAt(0).toUpperCase()+den.slice(1):'';
+        var des=txt(g(ix.des)); des=des?des.charAt(0).toUpperCase()+des.slice(1):den;
+        out.push({en:en,es:txt(g(ix.es))||en,date:date,end:end,time:parseTime(g(ix.time)),den:den,des:des,link:link});
+      });
+      return out;
+    }
+    function fmt(d,lang,o){return d.toLocaleDateString(lang==='es'?'es-US':'en-US',o)}
+    function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+    function mon(d,l){return cap(fmt(d,l,{month:'short'}).replace('.',''))}
+    function render(rows){
+      var dated=rows.filter(function(r){return r.date||r.end}), undated=rows.filter(function(r){return !r.date&&!r.end});
+      dated.sort(function(a,b){return (a.date||a.end)<(b.date||b.end)?-1:1});
+      var evHtml='', miniHtml='';
+      dated.forEach(function(r,i){
+        var col=COLORS[i%3], s=toDate(r.date), e=toDate(r.end), until=r.end||r.date, box, dEn, dEs;
+        var LONG={weekday:'long',month:'long',day:'numeric'}, FULL={month:'long',day:'numeric',year:'numeric'}, MD={month:'long',day:'numeric'};
+        if(e&&!s){ box=[T('Thru','Hasta'),e.getDate()]; dEn='Runs through '+fmt(e,'en',FULL); dEs='Hasta el '+fmt(e,'es',FULL); }
+        else if(e&&s&&r.end!==r.date){ box=[T(mon(s,'en'),mon(s,'es')),s.getDate()]; dEn=fmt(s,'en',MD)+' – '+fmt(e,'en',FULL); dEs='Del '+fmt(s,'es',MD)+' al '+fmt(e,'es',FULL); }
+        else { s=s||e; box=[T(mon(s,'en'),mon(s,'es')),s.getDate()]; dEn=fmt(s,'en',LONG); dEs=cap(fmt(s,'es',LONG)); }
+        if(r.time){dEn+=' · '+fmtTime(r.time,'en');dEs+=' · '+fmtTime(r.time,'es')}
+        var subEn=esc(dEn)+(r.den?' — '+esc(r.den):''), subEs=esc(dEs)+(r.des?' — '+esc(r.des):'');
+        var single=(!r.end||r.end===r.date)?(r.date||r.end):'';
+        var btn=r.link?'<a class="btn btn-ghost btn-sm" href="'+esc(r.link)+'" target="_blank" rel="noopener">'+T('More info','Más info')+' '+IEXT+'</a>'
+                      :'<a class="btn btn-ghost btn-sm" href="'+CAL_URL+'" target="_blank" rel="noopener">'+ICAL+' '+T('Calendar','Calendario')+'</a>';
+        var dbx='<div class="datebox '+col+'"><span class="m">'+box[0]+'</span><span class="d">'+box[1]+'</span></div>';
+        evHtml+='<div class="card event" data-until="'+until+'" data-date="'+single+'">'+dbx+'<div><h3>'+T(esc(r.en),esc(r.es))+'<span class="today-slot"></span></h3><p>'+T(subEn,subEs)+'</p></div>'+btn+'</div>';
+        miniHtml+='<div class="mini" data-until="'+until+'">'+dbx+'<div><b>'+T(esc(r.en),esc(r.es))+'</b><span class="w">'+T(subEn,subEs)+'</span></div></div>';
+      });
+      if(evList) evList.innerHTML=evHtml;
+      if(next) next.innerHTML=miniHtml;
+      if(tbd){var sec=tbd.closest('section');
+        if(undated.length){tbd.innerHTML=undated.map(function(r){return '<li>'+ICLOCK+T(esc(r.en),esc(r.es))+'</li>'}).join('');if(sec)sec.style.display=''}
+        else if(sec) sec.style.display='none';}
+      refreshEvents();
+    }
+    try{var c=JSON.parse(localStorage.getItem(KEY)||'null'); if(c&&c.rows) render(c.rows);}catch(e){}
+    var cb='__aiaSheet'+Math.floor(Math.random()*1e9), sc=document.createElement('script'), timer;
+    function done(){clearTimeout(timer);try{delete window[cb]}catch(e){window[cb]=undefined}sc.remove()}
+    window[cb]=function(resp){done();try{var rows=parse(resp);render(rows);try{localStorage.setItem(KEY,JSON.stringify({rows:rows,at:Date.now()}))}catch(e){}}catch(e){console.warn('AIA: could not read the Google Sheet —',e.message)}};
+    sc.onerror=function(){done();console.warn('AIA: Google Sheet unreachable; showing saved events')};
+    timer=setTimeout(done,10000);
+    var hr=parseInt(cfg.headerRow,10)||1;
+    sc.src='https://docs.google.com/spreadsheets/d/'+id+'/gviz/tq?headers=1'+(hr>1?'&range=A'+hr+':Z':'')+'&tqx=out:json;responseHandler:'+cb+(cfg.tab?'&sheet='+encodeURIComponent(cfg.tab):(g?'&gid='+g[1]:''))+'&_='+Date.now();
+    document.head.appendChild(sc);
+  })();
 
   document.querySelectorAll('[data-copy]').forEach(function(b){
     b.addEventListener('click',function(){
