@@ -14,6 +14,7 @@
   --plum:#4a2a7a; --plum-2:#6b3fb0; --plum-soft:#efe7fa; --plum-ink:#ffffff;
   --gold:#f2a516; --gold-soft:#fdf0d3; --gold-ink:#2a1c00;
   --coral:#df5a40; --coral-soft:#fbe4de; --teal:#12806e; --teal-soft:#dcf1ec; --sky:#2f6fd6; --sky-soft:#e1ebfb;
+  --wa:#0f7a45;
   --radius:20px; --radius-sm:12px;
   --shadow:0 1px 2px rgba(29,26,43,.05),0 10px 30px -12px rgba(29,26,43,.14);
   --display:"Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
@@ -85,6 +86,23 @@ html[data-lang="en"] .es, html[data-lang="es"] .en{display:none !important}
 .btn-light{background:#fff;color:#2b1650}
 .btn-outline-light{border-color:rgba(255,255,255,.5);color:#fff}
 .btn-sm{padding:9px 15px;font-size:14px}
+
+.btn-wa{background:var(--wa);color:#fff;box-shadow:0 6px 18px -8px rgba(15,122,69,.8)}
+.wa-bar{display:block;background:var(--wa);color:#fff;text-decoration:none;font-size:15.5px}
+.wa-bar .wrap{display:flex;align-items:center;gap:12px;min-height:52px;padding-top:8px;padding-bottom:8px}
+.wa-bar .wrap>.ic{flex:none}
+.wa-bar .wa-go{margin-left:auto;flex:none;display:inline-flex;align-items:center;gap:6px;font-weight:800;background:rgba(255,255,255,.18);padding:7px 14px;border-radius:999px;white-space:nowrap}
+.wa-bar:hover .wa-go{background:rgba(255,255,255,.3)}
+@media (max-width:640px){.wa-bar .wrap{flex-wrap:wrap;gap:8px 12px;padding-top:12px;padding-bottom:12px}.wa-bar .wrap>.ic{display:none}.wa-bar .wa-go{margin-left:0}}
+
+/* flyer */
+.card.flyer{display:none;grid-template-columns:1fr minmax(240px,330px);gap:40px;align-items:center;padding:28px 28px 28px 40px;margin-bottom:22px;background:var(--plum-soft);border-color:transparent}
+.card.flyer.on{display:grid}
+.flyer h3{font-family:var(--display);font-weight:600;font-size:clamp(1.5rem,3vw,2.1rem);margin-bottom:.3em}
+.flyer .when{color:var(--muted);margin-bottom:20px}
+.flyer .acts{display:flex;flex-wrap:wrap;gap:10px}
+.flyer-frame{width:100%;aspect-ratio:8.5/11;border:0;border-radius:var(--radius-sm);background:var(--surface);box-shadow:var(--shadow)}
+@media (max-width:760px){.card.flyer{grid-template-columns:1fr;padding:22px;gap:22px}.flyer-frame{max-width:420px;justify-self:center}}
 
 /* sections */
 .section{padding:84px 0}
@@ -411,7 +429,7 @@ html[data-lang="en"] .es, html[data-lang="es"] .en{display:none !important}
     var evList=document.querySelector('.events'), next=document.querySelector('.next-list'), tbd=document.querySelector('.tbd');
     if(!url||(!evList&&!next)) return;
     var m=url.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/); if(!m){console.warn('AIA: sheet link not recognized');return}
-    var id=m[1], g=url.match(/[#&?]gid=(\d+)/), KEY='aiapta-events-v3-'+id;
+    var id=m[1], g=url.match(/[#&?]gid=(\d+)/), KEY='aiapta-events-v4-'+id;
     var ICAL="<svg class=\"ic\" width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"/><path d=\"M16 2v4M8 2v4M3 10h18\"/></svg>", IEXT="<svg class=\"ic\" width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M15 3h6v6\"/><path d=\"M10 14 21 3\"/><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"/></svg>", ICLOCK="<svg class=\"ic\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 6v6l4 2\"/></svg>", CAL_URL="https://calendar.google.com/calendar/u/0?cid=MDJhNTNhNTMyMjhiOWMyNGY0YmZlYzIwNzIxODQxZGMyMDI2YTU2YTM4ZTU0YjI3MGI1NGUyYmVjNTgxMjU4OEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t", COLORS=['','gold','teal'];
     function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
     function T(en,es){return '<span class="en">'+en+'</span><span class="es">'+es+'</span>'}
@@ -468,7 +486,8 @@ html[data-lang="en"] .es, html[data-lang="es"] .en{display:none !important}
         single:find(/single|one.?day/), cont:find(/continu|ongoing|multi/),
         des:find(/detalle|nota|(detail|description|note).*(spanish|espa|\(es\))/),
         den:find(/note|detail|description|info/,SP),
-        link:find(/link|url|enlace|website/),
+        link:find(/link|url|enlace|website/,/flyer|pdf|poster|volante|folleto/),
+        flyer:find(/flyer|pdf|poster|volante|folleto/),
         time:find(/time|hora/,END)
       };
       ix.endMonth=find(new RegExp('('+END.source+').*(month|mes)'));
@@ -494,13 +513,32 @@ html[data-lang="en"] .es, html[data-lang="es"] .en{display:none !important}
         var link=txt(g(ix.link)); if(!/^https?:\/\//i.test(link)) link='';
         var den=txt(g(ix.den)); den=den?den.charAt(0).toUpperCase()+den.slice(1):'';
         var des=txt(g(ix.des)); des=des?des.charAt(0).toUpperCase()+des.slice(1):den;
-        out.push({en:en,es:txt(g(ix.es))||en,date:date,end:end,time:parseTime(g(ix.time)),den:den,des:des,link:link});
+        var fl=txt(g(ix.flyer)); if(!/^https?:\/\//i.test(fl)) fl='';
+        out.push({en:en,es:txt(g(ix.es))||en,date:date,end:end,time:parseTime(g(ix.time)),den:den,des:des,link:link,flyer:fl});
       });
       return out;
     }
     function fmt(d,lang,o){return d.toLocaleDateString(lang==='es'?'es-US':'en-US',o)}
     function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
     function mon(d,l){return cap(fmt(d,l,{month:'short'}).replace('.',''))}
+    // flyer for the next upcoming event that has one (Drive links are shown with Drive's PDF viewer)
+    function flyerUrls(u){var m=u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:[^#]*&)?id=)([a-zA-Z0-9_-]{10,})/);
+      if(m) return {embed:'https://drive.google.com/file/d/'+m[1]+'/preview',open:'https://drive.google.com/file/d/'+m[1]+'/view'};
+      return {embed:u,open:u};}
+    function showFlyer(dated){
+      var box=document.querySelector('.flyer'); if(!box) return;
+      var now=new Date(), today=iso(new Date(now.getFullYear(),now.getMonth(),now.getDate()));
+      var r=null; for(var i=0;i<dated.length;i++){if(dated[i].flyer&&dated[i]._until>=today){r=dated[i];break}}
+      if(!r){box.classList.remove('on');box.innerHTML='';return}
+      var u=flyerUrls(r.flyer);
+      if(box.getAttribute('data-src')===u.embed){box.classList.add('on');return}
+      box.setAttribute('data-src',u.embed);
+      box.innerHTML='<div><div class="eyebrow">'+T('Next up','Próximo evento')+'</div><h3>'+T(esc(r.en),esc(r.es))+'</h3>'
+        +'<p class="when">'+T(esc(r._dEn),esc(r._dEs))+'</p>'
+        +'<div class="acts"><a class="btn btn-plum" href="'+esc(u.open)+'" target="_blank" rel="noopener">'+T('Open the flyer','Abrir el volante')+' '+IEXT+'</a></div></div>'
+        +'<iframe class="flyer-frame" src="'+esc(u.embed)+'" title="'+esc(r.en)+' flyer" loading="lazy" allow="autoplay"></iframe>';
+      box.classList.add('on');
+    }
     function render(rows){
       var dated=rows.filter(function(r){return r.date||r.end}), undated=rows.filter(function(r){return !r.date&&!r.end});
       dated.sort(function(a,b){return (a.date||a.end)<(b.date||b.end)?-1:1});
@@ -512,6 +550,7 @@ html[data-lang="en"] .es, html[data-lang="es"] .en{display:none !important}
         else if(e&&s&&r.end!==r.date){ box=[T(mon(s,'en'),mon(s,'es')),s.getDate()]; dEn=fmt(s,'en',MD)+' – '+fmt(e,'en',FULL); dEs='Del '+fmt(s,'es',MD)+' al '+fmt(e,'es',FULL); }
         else { s=s||e; box=[T(mon(s,'en'),mon(s,'es')),s.getDate()]; dEn=fmt(s,'en',LONG); dEs=cap(fmt(s,'es',LONG)); }
         if(r.time){dEn+=' · '+fmtTime(r.time,'en');dEs+=' · '+fmtTime(r.time,'es')}
+        r._dEn=dEn; r._dEs=dEs; r._until=until;
         var subEn=esc(dEn)+(r.den?' — '+esc(r.den):''), subEs=esc(dEs)+(r.des?' — '+esc(r.des):'');
         var single=(!r.end||r.end===r.date)?(r.date||r.end):'';
         var btn=r.link?'<a class="btn btn-ghost btn-sm" href="'+esc(r.link)+'" target="_blank" rel="noopener">'+T('More info','Más info')+' '+IEXT+'</a>'
@@ -521,6 +560,7 @@ html[data-lang="en"] .es, html[data-lang="es"] .en{display:none !important}
         miniHtml+='<div class="mini" data-until="'+until+'">'+dbx+'<div><b>'+T(esc(r.en),esc(r.es))+'</b><span class="w">'+T(subEn,subEs)+'</span></div></div>';
       });
       if(evList) evList.innerHTML=evHtml;
+      showFlyer(dated);
       if(next) next.innerHTML=miniHtml;
       if(tbd){var sec=tbd.closest('section');
         if(undated.length){tbd.innerHTML=undated.map(function(r){return '<li>'+ICLOCK+T(esc(r.en),esc(r.es))+'</li>'}).join('');if(sec)sec.style.display=''}
