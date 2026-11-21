@@ -360,11 +360,175 @@ html[data-lang="en"] .es, html[data-lang="es"] .en{display:none !important}
   </div>
 </div></section>
 
-<section class="section alt"><div class="wrap split">
-  <div><div class="eyebrow"><span class="en">This school year</span><span class="es">Este año escolar</span></div><h2><span class="en">2026–2027 fundraisers</span><span class="es">Recaudaciones 2026–2027</span></h2>
-    <p class="en lead">Thank you for supporting our fundraising events!</p><p class="es lead">¡Gracias por apoyar nuestras recaudaciones!</p></div>
-  <div class="card"><ol class="timeline"><li><div class="when"><span class="en">October 2026</span><span class="es">Octubre 2026</span></div><div class="what"><span class="en">Krispy Kreme doughnut sale</span><span class="es">Venta de donas Krispy Kreme</span></div></li><li><div class="when"><span class="en">December 2026</span><span class="es">Diciembre 2026</span></div><div class="what"><span class="en">Hoffman Car Wash sales & Better Popcorn sales</span><span class="es">Venta de lavados Hoffman Car Wash y palomitas Better Popcorn</span></div></li><li><div class="when"><span class="en">January 2027</span><span class="es">Enero 2027</span></div><div class="what"><span class="en">Paesans Revenue Share Night</span><span class="es">Noche de ganancias compartidas en Paesans</span></div></li><li><div class="when"><span class="en">April 2027</span><span class="es">Abril 2027</span></div><div class="what"><span class="en">Read-a-thon</span><span class="es">Maratón de lectura</span></div></li><li><div class="when"><span class="en">April–May 2027</span><span class="es">Abril–mayo 2027</span></div><div class="what"><span class="en">Nothing Bundt Cake sale</span><span class="es">Venta de Nothing Bundt Cakes</span></div></li><li><div class="when"><span class="en">May 2027</span><span class="es">Mayo 2027</span></div><div class="what"><span class="en">CDPHP Workforce Challenge volunteering</span><span class="es">Voluntariado en el CDPHP Workforce Challenge</span></div></li></ol></div>
+<style>
+.fr-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:32px}
+.fr-head .sec-head{margin-bottom:0}
+.fr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:20px}
+.fr-card{position:relative;display:flex;flex-direction:column;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px 26px 24px;box-shadow:var(--shadow);overflow:hidden}
+.fr-card::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:var(--plum-2)}
+.fr-card.is-now::before{background:var(--gold)}
+.fr-card.is-now{border-color:color-mix(in srgb,var(--gold) 55%,var(--line))}
+.fr-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.fr-pill{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:5px 11px;border-radius:999px;background:var(--plum-soft);color:var(--plum)}
+.is-now .fr-pill{background:var(--gold-soft);color:#8a5a00}
+@media (prefers-color-scheme: dark){.is-now .fr-pill{color:var(--gold)}}
+.is-now .fr-pill::before{content:"";width:8px;height:8px;border-radius:50%;background:#e08a00;box-shadow:0 0 0 0 rgba(224,138,0,.6);animation:frpulse 2s infinite}
+@keyframes frpulse{0%{box-shadow:0 0 0 0 rgba(224,138,0,.55)}70%{box-shadow:0 0 0 8px rgba(224,138,0,0)}100%{box-shadow:0 0 0 0 rgba(224,138,0,0)}}
+@media (prefers-reduced-motion:reduce){.is-now .fr-pill::before{animation:none}}
+.fr-soon{font-size:13.5px;font-weight:700;color:var(--coral)}
+.fr-card h3{font-family:var(--display);font-weight:600;font-size:1.45rem;line-height:1.15;margin:2px 0 0}
+.fr-dates{display:flex;align-items:center;gap:8px;font-weight:650;color:var(--ink);font-size:15.5px}
+.fr-dates .ic{color:var(--plum-2);flex:none}
+.fr-card p{margin:0;color:var(--muted);font-size:15.5px}
+.fr-card .btn{align-self:flex-start;margin-top:auto}
+.fr-card .fr-spacer{flex:1}
+.fr-later{margin-top:44px}
+.fr-later h3{font-size:1.05rem;margin-bottom:14px}
+.fr-later .tbd li .ic{color:var(--plum-2)}
+.fr-past{margin-top:28px;color:var(--muted);font-size:15px}
+.fr-past b{color:var(--ink);font-weight:650}
+.fr-empty{padding:30px;text-align:center}
+</style>
+<section class="section alt" id="fundraisers"><div class="wrap">
+  <div class="fr-head"><div class="sec-head"><div class="eyebrow"><span class="en">This school year</span><span class="es">Este año escolar</span></div><h2><span class="en">Current & upcoming fundraisers</span><span class="es">Recaudaciones actuales y próximas</span></h2>
+    <p class="en lead">Thank you for supporting our fundraising events!</p><p class="es lead">¡Gracias por apoyar nuestras recaudaciones!</p></div></div>
+  <div id="fr-list" aria-live="polite"></div>
 </div></section>
+<script>
+(function(){
+  // ---- The fundraiser Google Sheet. To use a different sheet, paste its link here. ----
+  var SHEET_URL = "https://docs.google.com/spreadsheets/d/1JoGggyjT9mykhfl0S5gYRYNunFLhYSa87I8Ak4ltyco/edit?usp=sharing";
+  var SNAPSHOT = [["AIA fundraisers"], ["name of fundraiser", "start month", null, null, "end month", null, null, "description", "link"], ["Krispy Kreme doughnut sale", "October", null, 2026, "October", null, 2026, null, null], ["Hoffman Car Wash sales", null, null, null, "February", 28, 2027, "Wash away winter salt and slush on your own schedule—or grab extra cards as easy winter gifts—while helping our school thrive! Proceeds go toward supporting students at Albany International Academy.", "https://hoffmanfr.washassist.com/fundraiser/campaign/AIA"], ["Better Popcorn sales", "November", 24, 2026, "December", 1, 2026, "The most delicious way to support our PTA!", "https://popup.doublegood.com/s/wps2t148?sh=ccaq6"], ["Paesans Revenue Share Night"], ["Read-a-thon"], ["Nothing Bundt Cake sale"], ["CDPHP Workforce Challenge volunteering"]];
+  var ICAL="<svg class=\"ic\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\"/><path d=\"M16 2v4M8 2v4M3 10h18\"/></svg>", IEXT="<svg class=\"ic\" width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M15 3h6v6\"/><path d=\"M10 14 21 3\"/><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"/></svg>", ICLOCK="<svg class=\"ic\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 6v6l4 2\"/></svg>";
+  var box=document.getElementById('fr-list'); if(!box) return;
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function T(en,es){return '<span class="en">'+en+'</span><span class="es">'+es+'</span>'}
+  function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+  function toDate(s){var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2])}
+  var MONTHS={jan:0,ene:0,feb:1,mar:2,apr:3,abr:3,may:4,jun:5,jul:6,aug:7,ago:7,sep:8,set:8,oct:9,nov:10,dec:11,dic:11};
+  function str(v){return v==null?'':String(v).trim()}
+  function monthIdx(t){t=str(t).toLowerCase(); if(!t) return -1; if(/^\d{1,2}$/.test(t)) return +t-1; var k=t.slice(0,3); return k in MONTHS?MONTHS[k]:-1}
+  function num(v){if(v==null||v==='')return null; var n=typeof v==='number'?v:parseInt(String(v).replace(/[^\d]/g,''),10); return isNaN(n)?null:n}
+  function fullDate(v){var s=str(v),m; if(!s) return null;
+    if((m=s.match(/^Date\((\d+),(\d+),(\d+)/))) return new Date(+m[1],+m[2],+m[3]);
+    if((m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))) return new Date(+m[1],+m[2]-1,+m[3]);
+    if((m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/))){var y=+m[3];if(y<100)y+=2000;return new Date(y,+m[1]-1,+m[2])}
+    var d=new Date(s); return isNaN(d)?null:d}
+
+  // rows: array of arrays of plain cell values (header row found automatically)
+  function parse(rows){
+    var h=-1;
+    for(var i=0;i<Math.min(rows.length,10);i++){var r=(rows[i]||[]).map(function(x){return str(x).toLowerCase()});
+      if(r.some(function(x){return /name|fundraiser|recaudaci/.test(x)})&&r.some(function(x){return /month|date|start|end|link|desc/.test(x)})){h=i;break}}
+    var hdr=(h>=0?rows[h]:[]).map(function(x){return str(x).toLowerCase()});
+    function find(re,not){for(var i=0;i<hdr.length;i++){if(hdr[i]&&re.test(hdr[i])&&!(not&&not.test(hdr[i])))return i}return -1}
+    var START=/start|begin|from|inicio|desde/, END=/end|until|through|thru|hasta|fin\b|final/;
+    var ix={
+      name:find(/name|fundraiser|event|recaudaci/,/month|date|desc|link|spanish|espa/),
+      es:find(/spanish|espa[ñn]ol|nombre/,/desc/),
+      desc:find(/desc|detail|about|info|note/,/spanish|espa/),
+      descEs:find(/(desc|detail).*(spanish|espa)|descripci/),
+      link:find(/link|url|website|store|shop|order|enlace/,/desc/)
+    };
+    if(ix.name<0) ix.name=0;
+    // a start/end group: one full-date column, or month + day + year columns (day/year columns may be unlabelled)
+    function group(re, other, fallback){
+      var i=find(re,other); if(i<0&&h<0) i=fallback; if(i<0) return null;
+      var g={i:i, month:/month|mes/.test(hdr[i])||h<0};
+      if(g.month){
+        var d=find(new RegExp('('+re.source+').*(day|date|d[ií]a)')), y=find(new RegExp('('+re.source+').*(year|a[ñn]o)'));
+        g.day=d>=0?d:(!hdr[i+1]?i+1:-1);
+        g.year=y>=0?y:(g.day===i+1&&!hdr[i+2]?i+2:-1);
+      }
+      return g;
+    }
+    var gs=group(START,null,1), ge=group(END,START,4);
+    if(h<0){ix.desc=7;ix.link=8}
+    function get(row,g,kind){
+      if(!g) return null;
+      if(!g.month){var d=fullDate(row[g.i]); return d?{d:iso(d),p:'day'}:null}
+      var mi=monthIdx(row[g.i]); if(mi<0) return null;
+      var day=g.day>=0?num(row[g.day]):null, y=g.year>=0?num(row[g.year]):null;
+      if(day&&(day<1||day>31)) day=null; if(y&&y<100) y+=2000;
+      var inferred=!y;
+      if(!y){var now=new Date(), c=new Date(now.getFullYear(),mi,day||15), diff=(c-now)/864e5; y=now.getFullYear()+(diff<-183?1:diff>183?-1:0)}
+      var dt=day?new Date(y,mi,day):(kind==='start'?new Date(y,mi,1):new Date(y,mi+1,0));
+      return {d:iso(dt),p:day?'day':'month',inferred:inferred};
+    }
+    var out=[];
+    rows.slice(h+1).forEach(function(r){r=r||[];
+      var name=str(r[ix.name]); if(!name) return;
+      var s=get(r,gs,'start'), e=get(r,ge,'end');
+      if(s&&e&&e.d<s.d){var t=toDate(e.d);t.setFullYear(t.getFullYear()+1);if(e.p==='month')t=new Date(t.getFullYear(),t.getMonth()+1,0);e.d=iso(t)}
+      var link=str(r[ix.link]); if(!/^https?:\/\//i.test(link)) link='';
+      var desc=ix.desc>=0?str(r[ix.desc]):'';
+      out.push({en:name, es:(ix.es>=0&&str(r[ix.es]))||name, s:s, e:e, desc:desc, descEs:(ix.descEs>=0&&str(r[ix.descEs]))||desc, link:link});
+    });
+    return out;
+  }
+
+  function fmt(x,lang,withYear){var d=toDate(x.d), L=lang==='es'?'es-US':'en-US';
+    if(x.p==='month'){var mo=d.toLocaleDateString(L,withYear===false?{month:'long'}:{month:'long',year:'numeric'}); return lang==='es'?mo:cap(mo)}
+    return d.toLocaleDateString(L,withYear===false?{month:'short',day:'numeric'}:{month:'short',day:'numeric',year:'numeric'}).replace(/\./g,'')}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+  function dateLine(it,lang){var s=it.s,e=it.e,es=lang==='es';
+    if(s&&e){ if(s.d===e.d||(s.p==='month'&&e.p==='month'&&s.d.slice(0,7)===e.d.slice(0,7))) return fmt(s,lang);
+      var sameYear=s.d.slice(0,4)===e.d.slice(0,4); return (es?'Del ':'')+fmt(s,lang,!sameYear)+(es?' al ':' – ')+fmt(e,lang); }
+    if(e) return (es?(e.p==='day'?'Hasta el ':'Hasta '):'Through ')+fmt(e,lang);
+    if(s) return (es?(s.p==='day'?'Desde el ':'Desde '):'Starting ')+fmt(s,lang);
+    return '';}
+  function days(a,b){return Math.round((toDate(b)-toDate(a))/864e5)}
+
+  function render(items){
+    var now=new Date(), today=iso(new Date(now.getFullYear(),now.getMonth(),now.getDate()));
+    var live=[], soon=[], later=[], past=[];
+    items.forEach(function(it){
+      var s=it.s&&it.s.d, e=it.e&&it.e.d;
+      if(!s&&!e) later.push(it); else if(e&&e<today) past.push(it); else if(s&&s>today) soon.push(it); else live.push(it);
+    });
+    live.sort(function(a,b){return (a.e?a.e.d:'9')<(b.e?b.e.d:'9')?-1:1});
+    soon.sort(function(a,b){return a.s.d<b.s.d?-1:1});
+    past.sort(function(a,b){return a.e.d<b.e.d?1:-1});
+    function card(it,isNow){
+      var pill=isNow?T('On sale now','A la venta ahora'):T('Coming up','Próximamente'), extra='';
+      if(isNow&&it.e&&it.e.p==='day'){var n=days(today,it.e.d);
+        extra=n===0?T('Last day!','¡Último día!'):n===1?T('Ends tomorrow','Termina mañana'):n<=14?T('Ends in '+n+' days','Termina en '+n+' días'):'';}
+      if(!isNow&&it.s&&it.s.p==='day'){var m=days(today,it.s.d);
+        extra=m===1?T('Starts tomorrow','Empieza mañana'):m<=30?T('Starts in '+m+' days','Empieza en '+m+' días'):'';}
+      var btn=it.link?'<a class="btn '+(isNow?'btn-gold':'btn-ghost')+'" href="'+esc(it.link)+'" target="_blank" rel="noopener">'+(isNow?T('Order now','Ordenar ahora'):T('Learn more','Más información'))+' '+IEXT+'</a>':'';
+      return '<article class="fr-card'+(isNow?' is-now':'')+'"><div class="fr-top"><span class="fr-pill">'+pill+'</span>'+(extra?'<span class="fr-soon">'+extra+'</span>':'')+'</div>'
+        +'<h3>'+T(esc(it.en),esc(it.es))+'</h3>'
+        +'<div class="fr-dates">'+ICAL+T(esc(dateLine(it,'en')),esc(dateLine(it,'es')))+'</div>'
+        +(it.desc?'<p>'+T(esc(it.desc),esc(it.descEs))+'</p>':'')
+        +(btn?'<span class="fr-spacer"></span>'+btn:'')+'</article>';
+    }
+    var html='';
+    if(live.length||soon.length) html+='<div class="fr-grid">'+live.map(function(i){return card(i,true)}).join('')+soon.map(function(i){return card(i,false)}).join('')+'</div>';
+    else html+='<div class="card fr-empty">'+T('New fundraisers are on the way — check back soon!','Pronto habrá nuevas recaudaciones — ¡vuelve pronto!')+'</div>';
+    if(later.length) html+='<div class="fr-later"><h3>'+T('Also planned this year — dates coming soon','También planeado este año — fechas por anunciar')+'</h3><ul class="tbd">'
+      +later.map(function(i){return '<li>'+ICLOCK+T(esc(i.en),esc(i.es))+'</li>'}).join('')+'</ul></div>';
+    if(past.length) html+='<p class="fr-past">'+T('<b>Thank you</b> for supporting: ','<b>Gracias</b> por apoyar: ')
+      +past.map(function(i){return T(esc(i.en),esc(i.es))+' <span>('+T(esc(dateLine(i,'en')),esc(dateLine(i,'es')))+')</span>'}).join(' · ')+'</p>';
+    box.innerHTML=html;
+  }
+
+  var m=SHEET_URL.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/), id=m?m[1]:'', g=SHEET_URL.match(/[#&?]gid=(\d+)/), KEY='aiapta-fundraisers-v1-'+id;
+  var cached=null; try{cached=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}
+  render(parse(cached&&cached.rows||SNAPSHOT));
+  if(!id) return;
+  var cb='__aiaFr'+Math.floor(Math.random()*1e9), sc=document.createElement('script'), timer;
+  function done(){clearTimeout(timer);try{delete window[cb]}catch(e){window[cb]=undefined}sc.remove()}
+  window[cb]=function(resp){done();
+    try{ if(!resp||resp.status==='error') throw new Error(JSON.stringify(resp&&resp.errors));
+      var rows=resp.table.rows.map(function(r){return (r.c||[]).map(function(c){return c&&c.v!=null?(typeof c.v==='number'||/^Date\(/.test(c.v)?c.v:String(c.v)):null})});
+      render(parse(rows)); try{localStorage.setItem(KEY,JSON.stringify({rows:rows,at:Date.now()}))}catch(e){}
+    }catch(e){console.warn('AIA: could not read the fundraiser sheet —',e.message)}};
+  sc.onerror=function(){done();console.warn('AIA: fundraiser sheet unreachable; showing saved list')};
+  timer=setTimeout(done,10000);
+  sc.src='https://docs.google.com/spreadsheets/d/'+id+'/gviz/tq?headers=0&tqx=out:json;responseHandler:'+cb+(g?'&gid='+g[1]:'')+'&_='+Date.now();
+  document.head.appendChild(sc);
+})();
+</script>
 
 <section class="section"><div class="wrap"><div class="band">
   <div><h2><span class="en">No time? Don’t want more stuff?</span><span class="es">¿Sin tiempo? ¿No quieres más cosas?</span></h2>
